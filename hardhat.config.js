@@ -5,7 +5,11 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY;
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 
+// change these for different networks
 const ALCHEMY_URL = `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
+//const ALCHEMY_URL = `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
+//const ALCHEMY_URL = `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
+//const ALCHEMY_URL = `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`;
 
 const STUNT_WALLET_PRIVATE_KEY = process.env.STUNT_WALLET_PRIVATE_KEY;
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY;
@@ -27,14 +31,14 @@ module.exports = {
     outputFile: "gas-report.txt",
     noColors: true,
   },
-  defaultNetwork: "polygonMumbai",
+  defaultNetwork: "polygonMumbai", // hardhat for testing, change this for different networks
   networks: {
     hardhat: {
       chainId: 31337,
     },
     polygonMumbai: {
       url: ALCHEMY_URL,
-      account: [STUNT_WALLET_PRIVATE_KEY],
+      accounts: [STUNT_WALLET_PRIVATE_KEY],
       gasPrice: 35000000000,
       chainId: 80001,
     },
@@ -58,10 +62,10 @@ module.exports = {
     },
   },
   solidity: {
-    version: "0.8.20",
+    version: "0.8.20", // use an exact version here and in contract to avoid verification problems
     settings: {
       optimizer: {
-        enabled: false, // could cause verification issues if true
+        enabled: false, // may cause verification problems if true
       },
     },
   },
