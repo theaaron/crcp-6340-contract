@@ -98,7 +98,7 @@ describe("AaronNFTContract", async function () {
     });
 
     it("should set owner to the deployer's address when constucted", async function () {
-      const expectedValue = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+      const expectedValue = "0x4B47F1175c47Fa3d57C0b13C7cf7b9B6F242e103";
       const currentValue = await AaronNFTContract.owner();
       assert.equal(currentValue.toString(), expectedValue);
     });
@@ -319,7 +319,7 @@ describe("AaronNFTContract", async function () {
     });
 
     it("should emit an event after funds are distributed during mint", async function () {
-      //      const owner = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+      //      const owner = "0x4B47F1175c47Fa3d57C0b13C7cf7b9B6F242e103";
       const [owner, artist, buyer] = await ethers.getSigners();
       const uriString = "someString";
       expect(
