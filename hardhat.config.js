@@ -20,7 +20,7 @@ module.exports = {
       mainnet: ETHERSCAN_API_KEY,
       sepolia: ETHERSCAN_API_KEY,
       polygon: POLYGONSCAN_API_KEY,
-      polygonMumbai: POLYGONSCAN_API_KEY,
+      polygonAmoy: POLYGONSCAN_API_KEY,
     },
   },
   gasReporter: {
@@ -62,7 +62,7 @@ module.exports = {
     },
   },
   solidity: {
-    version: "0.8.20", // use an exact version here and in contract to avoid verification problems
+    version: "0.8.24", // use an exact version here and in contract to avoid verification problems
     settings: {
       optimizer: {
         enabled: false, // may cause verification problems if true
