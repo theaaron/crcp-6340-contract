@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Compatible with OpenZeppelin Contracts ^5.0.0
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -15,8 +14,15 @@ error AaronNFTContract__ValueNotEqualPrice();
 error AaronNFTContract__WrongAvenueForThisTransaction();
 
 /// @custom:security-contact aaron.a@me.com
-contract AaronNFTContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, ERC721Royalty, Ownable, ReentrancyGuard {
-
+contract AaronNFTContract is 
+    ERC721, 
+    ERC721Enumerable, 
+    ERC721URIStorage, 
+    ERC721Burnable, 
+    ERC721Royalty, 
+    Ownable, 
+    ReentrancyGuard 
+{
     uint256 private _tokenIdCounter;
     uint256 private immutable i_mint_price;
     uint256 private immutable i_max_tokens;
@@ -27,10 +33,13 @@ contract AaronNFTContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721B
     event MintingCompleted(uint tokenId, address owner);
     event FundsDistributed(address owner, uint amount);
 
-    constructor(uint256 _mint_price, uint256 _max_tokens, string memory _base_uri, address _royaltyArtist, uint96 _royaltyBasis)
-        ERC721("AaronNFTContract", "ANC")
-        Ownable(msg.sender)
-    {
+    constructor(
+        uint256 _mint_price, 
+        uint256 _max_tokens, 
+        string memory _base_uri, 
+        address _royaltyArtist, 
+        uint96 _royaltyBasis
+    ) ERC721("AaronNFTContract", "ANC") Ownable(msg.sender) {
         i_mint_price = _mint_price;
         i_max_tokens = _max_tokens;
         s_base_uri = _base_uri;
@@ -46,7 +55,9 @@ contract AaronNFTContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721B
         revert AaronNFTContract__WrongAvenueForThisTransaction();
     }
 
-    function mintTo(string calldata uri) public payable nonReentrant returns (uint256) {
+    function mintTo(
+        string calldata uri
+    ) public payable nonReentrant returns (uint256) {
         uint256 tokenId = _tokenIdCounter;
         // check or supply limits
         if (tokenId >= i_max_tokens) {
@@ -56,18 +67,15 @@ contract AaronNFTContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721B
         if (msg.value != i_mint_price) {
             revert AaronNFTContract__ValueNotEqualPrice();
         }
-
         _tokenIdCounter++;
         uint256 newItemId = _tokenIdCounter;
         _safeMint(msg.sender, newItemId);
-
         emit MintingCompleted(newItemId, msg.sender);
         s_token_uri_holder = uri;
+        _setTokenURI(newItemId, uri);
         payable(i_owner).transfer(address(this).balance);
         emit FundsDistributed(i_owner, msg.value);
-        _setTokenURI(newItemId, uri);
         return newItemId;
-
     }
 
     function getMaxSupply() public view returns (uint256) {
@@ -98,21 +106,20 @@ contract AaronNFTContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721B
         return s_base_uri;
     }
     
-
     // The following functions are overrides required by Solidity.
 
-    function _update(address to, uint256 tokenId, address auth)
-        internal
-        override(ERC721, ERC721Enumerable)
-        returns (address)
-    {
+    function _update(
+        address to, 
+        uint256 tokenId, 
+        address auth
+    ) internal override(ERC721, ERC721Enumerable) returns (address) {
         return super._update(to, tokenId, auth);
     }
 
-    function _increaseBalance(address account, uint128 value)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
+    function _increaseBalance(
+        address account, 
+        uint128 value
+    ) internal override(ERC721, ERC721Enumerable) {
         super._increaseBalance(account, value);
     }
 
@@ -125,12 +132,16 @@ contract AaronNFTContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721B
     //     return super.tokenURI(tokenId);
     // }
 
-    function tokenURI( uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
+    function tokenURI(
+        uint256 tokenId
+    ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         _requireOwned(tokenId);
         return s_token_uri_holder;
     }
 
-    function supportsInterface(bytes4 interfaceId)
+    function supportsInterface(
+        bytes4 interfaceId
+    )
         public
         view
         override(ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Royalty)
