@@ -12,6 +12,7 @@ describe("AaronNFTContract", async function () {
     royaltyArtist: "0x94848CEe6eA7dBcc5322f0B13015A42ec63bC3BB",
     royaltyBasis: 500,
   };
+
   this.beforeEach(async function () {
     AaronNFTContractFactory = await ethers.getContractFactory(
       "AaronNFTContract"
@@ -31,6 +32,7 @@ describe("AaronNFTContract", async function () {
       args.royaltyBasis
     );
   });
+
   describe("construction and initialization", async function () {
     this.beforeEach(async function () {
       AaronNFTContractFactory = await ethers.getContractFactory(
@@ -51,21 +53,25 @@ describe("AaronNFTContract", async function () {
         args.royaltyBasis
       );
     });
+
     it("should be named AaronNFTContract", async function () {
       const expectedValue = "AaronNFTContract";
       const currentValue = await AaronNFTContract.name();
       assert.equal(currentValue.toString(), expectedValue);
     });
+
     it("should be have symbol ANC", async function () {
       const expectedValue = "ANC";
       const currentValue = await AaronNFTContract.symbol();
       assert.equal(currentValue.toString(), expectedValue);
     });
+
     it("should have a mint price set when constructed", async function () {
       const expectedValue = args.mint_price;
       const currentValue = await AaronNFTContract.getMintPrice();
       assert.equal(currentValue.toString(), expectedValue);
     });
+
     it("should have a max token supply set when constructed", async function () {
       const expectedValue = args.max_tokens;
       const currentValue = await AaronNFTContract.getMaxSupply();
@@ -128,7 +134,7 @@ describe("AaronNFTContract", async function () {
     it("should be called and revert if called from low-level transaction", async function () {
       let contractAddress = await AaronNFTContract.getAddress();
       const [owner, artist, buyer] = await ethers.getSigners();
-      expect(
+      await expect(
         buyer.sendTransaction({
           to: contractAddress,
           value: ethers.parseUnits("2.0", "ether"),
