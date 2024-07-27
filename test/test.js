@@ -104,7 +104,7 @@ describe("AaronNFTContract", async function () {
     });
 
     it("should set owner to the deployer's address when constucted", async function () {
-      const expectedValue = "0x4B47F1175c47Fa3d57C0b13C7cf7b9B6F242e103";
+      const expectedValue = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
       const currentValue = await AaronNFTContract.owner();
       assert.equal(currentValue.toString(), expectedValue);
     });
@@ -286,7 +286,7 @@ describe("AaronNFTContract", async function () {
     it("should have set the token uri during minting function", async function () {
       const [owner, artist, buyer] = await ethers.getSigners();
       const uriString = "someString";
-      const expectedValue = uriString;
+      const expectedValue = `${args.base_uri}${uriString}`;
       const mint1 = await AaronNFTContract.connect(buyer).mintTo(uriString, {
         value: args.mint_price,
       });

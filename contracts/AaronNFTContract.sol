@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -9,9 +10,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-error AaronNFTContract__MaxSupplyReached();
-error AaronNFTContract__ValueNotEqualPrice();
-error AaronNFTContract__WrongAvenueForThisTransaction();
+error AaronNFTContract_MaxSupplyReached();
+error AaronNFTContract_ValueNotEqualPrice();
+error AaronNFTContract_WrongAvenueForThisTransaction();
 
 /// @custom:security-contact aaron.a@me.com
 contract AaronNFTContract is 
@@ -48,11 +49,11 @@ contract AaronNFTContract is
     }
 
     receive() external payable {
-        revert AaronNFTContract__WrongAvenueForThisTransaction();
+        revert AaronNFTContract_WrongAvenueForThisTransaction();
     }
 
     fallback() external payable {
-        revert AaronNFTContract__WrongAvenueForThisTransaction();
+        revert AaronNFTContract_WrongAvenueForThisTransaction();
     }
 
     function mintTo(
@@ -61,11 +62,11 @@ contract AaronNFTContract is
         uint256 tokenId = _tokenIdCounter;
         // check or supply limits
         if (tokenId >= i_max_tokens) {
-            revert AaronNFTContract__MaxSupplyReached();
+            revert AaronNFTContract_MaxSupplyReached();
         }
         // make sure there is the right amount of money
         if (msg.value != i_mint_price) {
-            revert AaronNFTContract__ValueNotEqualPrice();
+            revert AaronNFTContract_ValueNotEqualPrice();
         }
         _tokenIdCounter++;
         uint256 newItemId = _tokenIdCounter;
@@ -123,21 +124,21 @@ contract AaronNFTContract is
         super._increaseBalance(account, value);
     }
 
-    // function tokenURI(uint256 tokenId)
-    //     public
-    //     view
-    //     override(ERC721, ERC721URIStorage)
-    //     returns (string memory)
-    // {
-    //     return super.tokenURI(tokenId);
-    // }
-
-    function tokenURI(
-        uint256 tokenId
-    ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
-        _requireOwned(tokenId);
-        return s_token_uri_holder;
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
     }
+
+    // function tokenURI(
+    //     uint256 tokenId
+    // ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
+    //     _requireOwned(tokenId);
+    //     return s_token_uri_holder;
+    // }
 
     function supportsInterface(
         bytes4 interfaceId
